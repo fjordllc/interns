@@ -18,12 +18,19 @@ class PracticesController < ApplicationController
 
   def create
     @practice = Practice.new(practice_params)
-
     if @practice.save
       SlackNotification.notify "<#{url_for(current_user)}|#{current_user.login_name}>が<#{url_for(@practice)}|#{@practice.title}>を作成しました。",
-                               username: "#{current_user.login_name}@bootcamp.fjord.jp",
-                               icon_url: current_user.avatar_url
-      redirect_to @practice, notice: 'プラクティスを作成しました。'
+      username: "#{current_user.login_name}@bootcamp.fjord.jp",
+      icon_url: current_user.avatar_url
+
+      @practice.reference_books.each do |book|
+        amazon_api = Amazon.new(book.asin, access_key: "mock_access_key", secret_key: "mock_secret_key", partner_tag: "mock_partner_tag")
+        book.image_url = amazon_api.image_url
+        book.page_url = amazon_api.page_url
+        book.save
+      end
+
+      redirect_to @practice, notice: "プラクティスを作成しました。"
     else
       render :new
     end
@@ -55,7 +62,8 @@ class PracticesController < ApplicationController
       :open_product,
       :include_progress,
       :memo,
-      category_ids: []
+      category_ids: [],
+      reference_books_attributes: %i[id title asin _destroy]
     )
   end
 
