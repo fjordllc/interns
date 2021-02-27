@@ -251,7 +251,7 @@ class UserTest < ActiveSupport::TestCase
     assert hajime.completed_all_practices?(category11)
   end
 
-  test 'dont unfollow user when other user unfollow user' do
+  test "don't unfollow user when other user unfollow user" do
     kimura = users(:kimura)
     hatsuno = users(:hatsuno)
     kimura.follow(hatsuno)
@@ -262,7 +262,7 @@ class UserTest < ActiveSupport::TestCase
     assert Following.find_by(follower_id: kimura.id, followed_id: hatsuno.id)
   end
 
-  test 'dont return retired user' do
+  test "don't return retired user" do
     yameo = users(:yameo)
     sql = User.search_by_keywords({ word: yameo.name.to_s, commentable_type: nil }).to_sql
     assert_match(/"retired_on" IS NULL/, sql)
