@@ -205,7 +205,7 @@ export default {
           return response.json();
         })
         .then(json => {
-          this.answers.forEach((answer, i) => {
+          this.answers.forEach((answer, _) => {
             if (answer.id == json.id) {
               answer.type = "CorrectAnswer";
             }
