@@ -21,12 +21,12 @@ section.o-static-page
     .l-container.is-xxl
       .o-static-page-body__inner
         .o-static-page-body__row
-          .o-horizontal-medias
-            .o-horizontal-medias__items
+          .o-horizontal-articles
+            .o-horizontal-articles__items
               .l-grids
                 - @articles.each do |article|
                   .l-grids__item.md-up:u-col-4.sm-down:u-col-12
-                    .o-horizontal-medias__item
+                    .o-horizontal-articles__item
                       = link_to article, itempro: "url", class: "m-medias-media" do
                         .m-medias-media__row
                           .m-medias-media__image-container
@@ -47,6 +47,8 @@ section.o-static-page
                                       .m-inline-list__item
                                         date.m-media-attributes__date
                                           | 2020年12月24日
+                                          // published_at
+                                          = article.created_at
                                       .m-inline-list__item
                                         .m-media-attributes__author
                                           = image_tag("https://via.placeholder.com/100", class: "a-circle-image")
@@ -54,16 +56,11 @@ section.o-static-page
                                             | machida
                       - if admin_login?
                         footer.articles-article__footer
-                          .card-footer-actions
-                            ul.card-footer-actions__items
-                              li.card-footer-actions__item
-                                = link_to edit_article_path(article), class: "card-footer-actions__action is-button-simple-md-primary is-block", id: "js-shortcut-edit" do
+                          .m-inline-icon-list
+                            ul.m-inline-icon-list__items
+                              li.m-inline-icon-list__item
+                                = link_to edit_article_path(article), class: "a-button is-md is-warning is-icon", id: "js-shortcut-edit" do
                                   i.fas.fa-pen#edit
-                                  | 内容修正
-                              li.card-footer-actions__item
-                                = link_to article_path(article), data: { confirm: "本当によろしいですか？" }, method: :delete, class: "card-footer-actions__action is-button-simple-md-danger is-block" do
-                                  i.fas.fa-trash-alt#delete
-                                  | 削除
 
         .o-static-page-body__row
           = paginate @articles, position: "bottom"
